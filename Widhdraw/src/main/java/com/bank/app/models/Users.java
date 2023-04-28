@@ -37,7 +37,7 @@ public class Users {
 		return name;
 	}
 	public void setName(String name) {
-		name = name;
+		this.name = name;
 	}
 	
 	 

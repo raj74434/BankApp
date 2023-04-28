@@ -5,6 +5,8 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import com.bank.app.models.Account;
@@ -67,6 +69,7 @@ public class DebitServiceImpl implements DebitService {
 		List<Users> lst = acc.getUsers();
 		for (int x = 0; x < lst.size(); x++) {
 			lst.get(x).setAccount(acc);
+			System.out.println(lst.get(x).getName());
 		}
 
 		return accountRepo.save(acc);

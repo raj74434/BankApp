@@ -1,6 +1,9 @@
 package com.bank.app.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -18,28 +21,28 @@ public class DebitController {
 	private DebitService debitService;
 	
 	@PostMapping("/debit/{user_id}/{amount}")
-	public String debit(@PathVariable("user_id") Integer user_id,
+	public  ResponseEntity<String> debit(@PathVariable("user_id") Integer user_id,
 			@PathVariable("amount")Integer amount) {
-		return debitService.debit(user_id, amount);
+		return new ResponseEntity<>(debitService.debit(user_id, amount),HttpStatus.OK);
 	}
 	
 	@GetMapping("/debit/findUser/{userId}")
-	public Users findUser(@PathVariable("userId") Integer id) throws Exception {
+	public  ResponseEntity<Users> findUser(@PathVariable("userId") Integer id) throws Exception {
 		Users user=debitService.findUser(id);
 				System.out.println(user);
-		return user ;
+		return new ResponseEntity<>(user,HttpStatus.ACCEPTED) ;
 	}
 	
 	@GetMapping("/debit/setBalance/{userId}/{amount}")
-	public Account setBalance(@PathVariable("userId") Integer id,
+	public ResponseEntity<Account> setBalance(@PathVariable("userId") Integer id,
 			@PathVariable("amount") Integer amount) throws Exception {
 		Users user=debitService.findUser(id);
-		return debitService.setBalance(amount,user);
+		return new ResponseEntity<>(debitService.setBalance(amount,user),HttpStatus.ACCEPTED);
 	}
 	
 	@PostMapping("/create")
-	public Account createAccount(@RequestBody  Account acc) {
-		return debitService.createAccount(acc);
+	public ResponseEntity<Account> createAccount(@RequestBody  Account acc) {
+		return new ResponseEntity<>( debitService.createAccount(acc),HttpStatus.CREATED);
 	}
 
 
@@ -47,9 +50,10 @@ public class DebitController {
 //	---------------------------------
 
 	@PostMapping("/credit/{userid}/{amount}")
-	public void credit(@PathVariable("userid") Integer user_id,
+	public ResponseEntity<String> credit(@PathVariable("userid") Integer user_id,
 					   @PathVariable("amount")Integer amount) throws Exception {
 		debitService.credit(user_id, amount);
+		return new ResponseEntity<>("Amount added in your account",HttpStatus.ACCEPTED);
 	}
 
 }
